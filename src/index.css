@@ -11,3 +11,125 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Poppins Font Setup */
+@font-face {
+  font-family: 'Poppins-ExtraLight';
+  font-weight: 300;
+  src: local('Poppins-ExtraLight'), url(./assets/fonts/Poppins-ExtraLight.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-Light';
+  font-weight: 300;
+  src: local('Poppins-Light'), url(./assets/fonts/Poppins-Light.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-Regular';
+  font-weight: 400;
+  src: local('Poppins-Regular'), url(./assets/fonts/Poppins-Regular.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-Medium';
+  font-weight: 500;
+  src: local('Poppins-Medium'), url(./assets/fonts/Poppins-Medium.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-SemiBold';
+  font-weight: 600;
+  src: local('Poppins-SemiBold'), url(./assets/fonts/Poppins-SemiBold.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-Bold';
+  font-weight: 700;
+  src: local('Poppins-Bold'), url(./assets/fonts/Poppins-Bold.otf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins-ExtraBold';
+  font-weight: 800;
+  src: local('Poppins-ExtraBold'), url(./assets/fonts/Poppins-ExtraBold.otf) format('truetype');
+}
+
+/* Poppins Font Setup */
+
+
+#actionButtonLogin {
+  background-color: #FFFFFF;
+  border-color: #12B3ED;
+  color: #12B3ED;
+  min-width: 90px;
+  min-height: 40px;
+  border-width: 2px;
+  border-radius: 8px;
+  font-family: 'Poppins-SemiBold';
+  transition: background-color 0.3s, color 0.3s;
+  /* Add smooth transition */
+
+  /* Hover styles */
+  &:hover {
+    background-color: #12B3ED;
+    color: #FFFFFF;
+  }
+}
+
+
+.custom-marker-icon {
+  background: transparent;
+  border: none;
+  margin: 0;
+  padding: 0;
+  color: tomato !important;
+  font-size: 30px;
+}
+
+#cardLogin {
+  background-color: #000A2E;
+  min-height: 30vh;
+  min-width: 70vw;
+  border-radius: 15px;
+  color: white;
+  border: none;
+}
+
+
+.btnAction {
+  height: 150px;
+  border: none !important;
+  min-width: 350px;
+  border-radius: 100px !important;
+  font-family: 'Poppins-SemiBold' !important;
+  font-size: 20px !important;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.8s !important;
+  background-size: 200% auto;
+  color: white !important;
+  /* text-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+  box-shadow: 0 0 20px #eee;
+}
+
+/* Demo Stuff End -> */
+
+/* <- Magic Stuff Start */
+
+.btnAction:hover {
+  background-position: right center;
+  /* change the direction of the change here */
+}
+
+.btnAction-1 {
+  background-image: linear-gradient(to right, #f6d365 0%,
+      #fda085 51%,
+      #f6d365 100%);
+}
+
+.btnAction-3 {
+  background-image: linear-gradient(to right, #84fab0 0%,
+      #8fd3f4 51%,
+      #84fab0 100%);
+}
