@@ -21,33 +21,6 @@ function AbsensiPage ()
         JSON.parse( localStorage.getItem( 'overtimeDurations' ) ) || []
     );
 
-    // useEffect( () =>
-    // {
-    //     const fetchData = async () =>
-    //     {
-    //         if ( userInfo?.id !== undefined ) {
-    //             await fetchListAbsensiMasuk();
-    //             await fetchListAbsensiKeluar();
-
-    //             // Assuming absensiMasuk and absensiKeluar are state variables
-    //             const durationsLate = absensiMasuk.map( ( item ) => item.late_duration || "00:00:00" );
-    //             const durationsEarly = absensiKeluar.map( ( item ) => item.early_duration || "00:00:00" );
-    //             const durationsOver = absensiKeluar.map( ( item ) => item.overtime_duration || "00:00:00" );
-
-    //             setLateDurations( durationsLate );
-    //             setEarlyOutDurations( durationsEarly );
-    //             setOvertimeDurations( durationsOver );
-
-    //             // Store data in localStorage
-    //             localStorage.setItem( 'lateDurations', JSON.stringify( durationsLate ) );
-    //             localStorage.setItem( 'earlyOutDurations', JSON.stringify( durationsEarly ) );
-    //             localStorage.setItem( 'overtimeDurations', JSON.stringify( durationsOver ) );
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [ userInfo?.id, absensiMasuk, absensiKeluar ] );
-
     useEffect( () =>
     {
         const fetchData = async () =>
@@ -147,24 +120,20 @@ function AbsensiPage ()
                 <Row>
                     <Col md={ 5 } className='mb-3'>
                         <Table responsive>
-                            <thead>
+                            <thead style={ { fontFamily: 'Poppins-Regular' } }>
                                 <tr className='text-center'>
                                     <th>#</th>
-                                    {/* <th>Detail</th> */ }
                                     <th>Masuk</th>
                                     <th>Keterlambatan</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style={ { fontFamily: 'Poppins-Light' } }>
                                 {
                                     absensiMasuk?.map( ( data, index ) =>
                                     {
                                         return (
                                             <tr key={ index } className='text-center'>
                                                 <td>{ index + 1 }</td>
-                                                {/* <td >
-                                                    <GoInfo size={ 25 } style={ { cursor: 'pointer' } } />
-                                                </td> */}
                                                 <td>
                                                     { data?.checkin_time.split( 'T' )[ 0 ] } { data?.checkin_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }
                                                 </td>
@@ -178,7 +147,7 @@ function AbsensiPage ()
                     </Col>
                     <Col md={ 7 } className='mb-3'>
                         <Table responsive>
-                            <thead>
+                            <thead style={ { fontFamily: 'Poppins-Regular' } }>
                                 <tr>
                                     <th>#</th>
                                     <th>Keluar</th>
@@ -186,7 +155,7 @@ function AbsensiPage ()
                                     <th>Lembur</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style={ { fontFamily: 'Poppins-Light' } }>
                                 {
                                     absensiKeluar?.map( ( data, index ) =>
                                     {

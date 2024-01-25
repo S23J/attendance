@@ -2,11 +2,66 @@ import React, { useContext } from 'react'
 import { Container, Image, Nav, Navbar, Offcanvas } from 'react-bootstrap'
 import { LogoNama } from '../../assets/images/image'
 import AuthContext from '../../auth/Context/AuthContext';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import axios from '../../adapters/API/axios';
 
 function NavbarComponent ()
 {
-    const { groups } = useContext( AuthContext );
+    const { groups, setGroups, tokens, setTokens, setUserInfo, userInfo } = useContext( AuthContext );
+    const navigate = useNavigate();
+
+    const LogoutSession = async () =>
+    {
+        const confirmDelete = await Swal.fire( {
+            title: 'Apakah anda yakin ingin keluar?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Keluar',
+            cancelButtonText: 'Batal',
+        } );
+
+        if ( !confirmDelete.isConfirmed ) {
+
+            return;
+        }
+        try {
+            await axios.post(
+                '/api/logout/',
+                {},
+                {
+                    headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        withCredentials: true,
+                        Authorization: `Token ${tokens.token}`,
+                    },
+                }
+            );
+
+            sessionStorage.removeItem( 'userInfo' );
+            sessionStorage.removeItem( 'token' );
+            sessionStorage.removeItem( 'groups' );
+            setTokens();
+            setUserInfo();
+            setGroups();
+            Swal.fire( {
+                icon: 'success',
+                title: 'Logout Success',
+                showConfirmButton: false,
+                timer: 2000,
+            } );
+            navigate( '/' );
+        } catch ( error ) {
+            console.log( error );
+            Swal.fire( {
+                icon: 'error',
+                title: 'Warning!',
+                text: 'Logout failed, something is wrong!',
+            } );
+        }
+    };
+
+
 
     return (
         <Navbar expand={ false } className="mb-3" sticky="top" style={ { backgroundColor: '#000A2E', minHeight: '70px' } }>
@@ -23,7 +78,9 @@ function NavbarComponent ()
                     id={ `offcanvasNavbar-expand-${false}` }
                     aria-labelledby={ `offcanvasNavbarLabel-expand-${false}` }
                     placement="end"
-                    style={ { maxWidth: '200px' } }
+                    data-bs-theme="dark"
+                    className='bg-dark'
+                    style={ { maxWidth: '200px', backgroundColor: '#1E1E1E', color: 'white' } }
                 >
                     <Offcanvas.Header closeButton style={ { fontFamily: 'Poppins-Medium' } }>
                         <Offcanvas.Title id={ `offcanvasNavbarLabel-expand-${false}` }>
@@ -38,18 +95,18 @@ function NavbarComponent ()
                                         <NavLink
                                             to='/hrd/'
                                             className='my-2'
-                                            style={ { textDecoration: 'none', color: '#222' } }
+                                            style={ { textDecoration: 'none', color: 'white' } }
                                         >
                                             Home
                                         </NavLink>
                                         <NavLink
                                             to='/data-karyawan/'
                                             className='my-2'
-                                            style={ { textDecoration: 'none', color: '#222' } }
+                                            style={ { textDecoration: 'none', color: 'white' } }
                                         >
                                             Data Karyawan
                                         </NavLink>
-                                        <Nav.Link href="#action2">Keluar</Nav.Link>
+
                                     </>
                                 )
                                 :
@@ -58,22 +115,21 @@ function NavbarComponent ()
                                         <NavLink
                                             to='/home/'
                                             className='my-2'
-                                            style={ { textDecoration: 'none', color: '#222' } }
+                                            style={ { textDecoration: 'none', color: 'white' } }
                                         >
                                             Home
                                         </NavLink>
                                         <NavLink
                                             to='/data-absensi/'
                                             className='my-2'
-                                            style={ { textDecoration: 'none', color: '#222' } }
+                                            style={ { textDecoration: 'none', color: 'white' } }
                                         >
                                             Data Absensi
                                         </NavLink>
-                                        <Nav.Link href="#action2">Keluar</Nav.Link>
                                     </>
                                 )
                             }
-
+                            <NavLink className='my-2' onClick={ LogoutSession } style={ { textDecoration: 'none', color: 'white' } }>Keluar</NavLink>
                         </Nav>
                     </Offcanvas.Body>
                 </Navbar.Offcanvas>

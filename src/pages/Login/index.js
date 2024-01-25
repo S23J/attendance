@@ -70,6 +70,7 @@ function Login ()
             // console.log( response.data )
 
         } catch ( err ) {
+            console.log( err )
             if ( !err?.response ) {
                 Swal.fire( {
                     icon: 'error',

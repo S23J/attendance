@@ -1,29 +1,33 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import NavbarComponent from '../../component/Navbar'
-import { Container, Table } from 'react-bootstrap'
+import { Button, Col, Container, Row, Table } from 'react-bootstrap'
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import { GoInfo } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
+import { IoPersonAdd } from "react-icons/io5";
+import ModalTambahKaryawan from '../../component/Modal/ModalTambahKaryawan';
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 
 function DataKaryawan ()
 {
-    const { tokens, userInfo } = useContext( AuthContext );
+    const { tokens } = useContext( AuthContext );
     const [ listUser, setListUser ] = useState( [] );
-    // const [ listEmployee, setLislistEmployee ] = useState( [] );
     const tokenUser = tokens?.token;
     const navigate = useNavigate();
-
     const handleDetail = ( data ) =>
     {
         navigate( '/detail-karyawan/' + data.id + '/' )
+    };
+    const [ showAddKaryawan, setShowAddKaryawan ] = useState( false );
+    const handleShowAddKaryawan = () =>
+    {
+        setShowAddKaryawan( true );
     }
 
     useEffect( () =>
     {
         if ( tokenUser !== undefined ) fetchListUser()
-        // if ( tokenUser !== undefined ) fetchListEmployee()
-        // if ( userInfo?.id !== undefined ) fetchListAbsensiKeluar()
     }, [ tokenUser ] );
 
     const fetchListUser = () =>
@@ -41,7 +45,6 @@ function DataKaryawan ()
             {
 
                 setListUser( res.data );
-                // console.log( res.data )
             } ).catch( err =>
             {
 
@@ -49,77 +52,114 @@ function DataKaryawan ()
             } )
     };
 
-    // const fetchListEmployee = () =>
-    // {
-    //     axios.get( `api/employee/`,
-    //         {
-    //             headers:
-    //             {
 
-    //                 Authorization: `Token ` + tokenUser,
-    //             },
+    const columns = useMemo(
+        () => [
+            {
+                header: 'Detail',
+                accessorFn: row => (
+                    <div >
+                        <GoInfo
+                            size={ 20 }
+                            onClick={ () => handleDetail( row ) }
+                            style={ { cursor: 'pointer' } }
+                        />
 
-    //         } )
-    //         .then( res =>
-    //         {
+                    </div>
+                ),
+                size: 10,
+                mantineTableHeadCellProps: {
+                    align: 'left',
+                },
+                mantineTableBodyCellProps: {
+                    align: 'left',
+                },
+            },
+            {
+                header: 'Username',
+                accessorKey: 'username',
+                mantineTableHeadCellProps: {
+                    align: 'center',
+                },
+                mantineTableBodyCellProps: {
+                    align: 'center',
+                },
+            },
+            {
+                header: 'Nama Depan',
+                accessorKey: 'first_name',
+                mantineTableHeadCellProps: {
+                    align: 'center',
+                },
+                mantineTableBodyCellProps: {
+                    align: 'center',
+                },
+            },
+            {
+                header: 'Nama Belakang',
+                accessorKey: 'last_name',
+                mantineTableHeadCellProps: {
+                    align: 'center',
+                },
+                mantineTableBodyCellProps: {
+                    align: 'center',
+                },
+            },
 
-    //             setLislistEmployee( res.data );
-    //             // console.log( res.data )
-    //         } ).catch( err =>
-    //         {
+        ],
+        [],
+    );
 
-    //             console.log( err )
-    //         } )
-    // };
-
+    const table = useMantineReactTable( {
+        columns,
+        enableDensityToggle: false,
+        initialState: {
+            density: 'xs',
+            sorting: [
+                {
+                    id: 'username', //sort by age by default on page load
+                    asc: true,
+                },
+            ],
+        },
+        data: listUser,
+        enableRowNumbers: true,
+        rowNumberMode: 'static',
+        isMultiSortEvent: () => true,
+        mantineTableProps: { striped: true },
+    } );
 
 
 
     return (
         <>
             <NavbarComponent />
-            <h1 className='display-6 text-center'>Data Karyawan</h1>
-            <Container className='mt-5'>
-                <Table responsive>
-                    <thead>
-                        <tr className='text-center'>
-                            <th>#</th>
-                            <th>Detail</th>
-                            <th>Username</th>
-                            <th>Nama Depan</th>
-                            <th>Nama Belakang</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            listUser?.map( ( data, index ) =>
-                            {
-                                return (
-                                    <tr key={ index } className='text-center'>
-                                        <td>{ index + 1 }</td>
-                                        <td >
-                                            <GoInfo
-                                                size={ 25 }
-                                                onClick={ () => handleDetail( data ) }
-                                                style={ { cursor: 'pointer' } }
-                                            />
-                                        </td>
-                                        <td >
-                                            { data?.username }
-                                        </td>
-                                        <td >
-                                            { data?.first_name }
-                                        </td>
-                                        <td >
-                                            { data?.last_name }
-                                        </td>
-                                    </tr>
-                                )
-                            } )
-                        }
-                    </tbody>
-                </Table>
+            <Container>
+                <Row>
+                    <Col xs={ 6 } md={ 10 }>
+                        <h1 className='display-6 text-center' style={ { fontFamily: 'Poppins-Light' } }>Data Karyawan</h1>
+                    </Col>
+                    <Col xs={ 6 } md={ 2 } className='my-auto text-end'>
+                        <Button
+                            onClick={ handleShowAddKaryawan }
+                            variant='btn'
+                            style={ { minHeight: '50px', backgroundColor: '#12B3ED', color: 'white', fontFamily: 'Poppins-Regular' } }
+                        >
+                            Tambah <IoPersonAdd size={ 20 } />
+                        </Button>
+                    </Col>
+                </Row>
             </Container>
+            <Container className='mt-5'>
+                <MantineReactTable
+                    table={ table }
+                />
+            </Container>
+            <ModalTambahKaryawan
+                showAddKaryawan={ showAddKaryawan }
+                setShowAddKaryawan={ setShowAddKaryawan }
+                fetchListUser={ fetchListUser }
+            />
         </>
     )
 }

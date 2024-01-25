@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import NavbarComponent from '../../component/Navbar'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Col, Container, Image, Row, Table } from 'react-bootstrap';
+import { Col, Container, Image, Row, Tab, Tabs } from 'react-bootstrap';
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import { useMediaQuery } from 'react-responsive';
-import { GoInfo } from 'react-icons/go';
+import TabAbsenMasuk from '../../component/TabsAbsensi/TabAbsenMasuk';
+import TabAbsenKeluar from '../../component/TabsAbsensi/TabAbsenKeluar';
 
 function DetailKaryawan ()
 {
@@ -14,6 +15,7 @@ function DetailKaryawan ()
     const tokenUser = tokens?.token;
     const [ userDetail, setUserDetail ] = useState();
     const [ employeeDetail, setEmployeeDetail ] = useState();
+    const [ listGroup, setListGroup ] = useState( [] );
     const isMobile = useMediaQuery( { maxWidth: 767 } );
     const [ absensiMasuk, setAbsensiMasuk ] = useState( [] );
     const [ absensiKeluar, setAbsensiKeluar ] = useState( [] );
@@ -29,9 +31,9 @@ function DetailKaryawan ()
 
     const navigate = useNavigate();
 
-    const handleAbsensiDetail = ( data ) =>
+    const handleAbsensiDetail = ( row ) =>
     {
-        navigate( '/detail-absensi/' + data.id + '/' )
+        navigate( '/detail-absensi/' + row.id + '/' )
     }
 
     useEffect( () =>
@@ -41,6 +43,7 @@ function DetailKaryawan ()
             if ( karyawanid !== undefined && tokenUser !== undefined ) {
 
                 await fetchUserDetail();
+
                 await fetchEmployeeDetail();
                 await fetchListAbsensiMasuk();
                 await fetchListAbsensiKeluar();
@@ -89,7 +92,7 @@ function DetailKaryawan ()
             {
 
                 setUserDetail( res.data );
-                // console.log( res.data )
+                fetchListGroup( res.data );
             } ).catch( err =>
             {
 
@@ -99,7 +102,7 @@ function DetailKaryawan ()
 
     const fetchEmployeeDetail = () =>
     {
-        axios.get( `api/employee/${karyawanid}`,
+        axios.get( `api/employee_detail/${karyawanid}`,
             {
                 headers:
                 {
@@ -113,7 +116,6 @@ function DetailKaryawan ()
 
                 setEmployeeDetail( res.data );
 
-                // console.log( res.data )
             } ).catch( err =>
             {
 
@@ -121,6 +123,33 @@ function DetailKaryawan ()
             } )
     };
 
+
+    const fetchListGroup = ( user_detail ) =>
+    {
+        axios.get( `/api/groups/`,
+            {
+                headers:
+                {
+
+                    Authorization: `Token ` + tokenUser,
+                },
+
+            } )
+            .then( res =>
+            {
+                const userGroupId = user_detail?.groups[ 0 ];
+
+                const filteredGroup = res.data.filter( group => group?.id === userGroupId );
+
+                setListGroup( filteredGroup[ 0 ] );
+
+
+            } ).catch( err =>
+            {
+
+                console.log( err )
+            } )
+    };
 
     const fetchListAbsensiMasuk = () =>
     {
@@ -174,23 +203,20 @@ function DetailKaryawan ()
             } )
     };
 
-    // console.log( absensiMasuk )
-
 
     return (
         <>
             <NavbarComponent />
-            <h1 className='display-6 text-center'>Info Detail</h1>
-            <h3 className='text-center'>Nama: { userDetail?.first_name } { userDetail?.last_name }</h3>
+            <h1 className='display-6 text-center' style={ { fontFamily: 'Poppins-Light' } } >Info Detail</h1>
+            <h3 className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>Nama: { userDetail?.first_name } { userDetail?.last_name }</h3>
             <Container className='mt-5' style={ { maxWidth: '800px' } }>
                 <Row>
-                    <Col md={ 6 } className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>
+                    <Col md={ 6 } className='text-center' >
                         <Image
                             src={ employeeDetail?.picture }
                             fluid
                             width={ 300 }
                             rounded
-                            // roundedCircle
                             style={ { border: '10px solid #000A2E' } }
                         />
                     </Col>
@@ -198,80 +224,39 @@ function DetailKaryawan ()
                         <p >Username: { userDetail?.username }</p>
                         <p >Email: { userDetail?.email }</p>
                         <p >No. Telp: { employeeDetail?.phone }</p>
+                        <p >Divisi : { listGroup?.name }</p>
                     </Col>
                 </Row>
             </Container>
             <Container className='mt-5'>
-                <Row>
-                    <Col md={ 5 } className='mb-3'>
-                        <Table responsive>
-                            <thead>
-                                <tr className='text-center'>
-                                    <th>#</th>
-                                    <th>Detail</th>
-                                    <th>Masuk</th>
-                                    <th>Keterlambatan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    absensiMasuk?.map( ( data, index ) =>
-                                    {
-                                        return (
-                                            <tr key={ index } className='text-center'>
-                                                <td>{ index + 1 }</td>
-                                                <td >
-                                                    <GoInfo
-                                                        size={ 25 }
-                                                        onClick={ () => handleAbsensiDetail( data ) }
-                                                        style={ { cursor: 'pointer' } } />
-                                                </td>
-                                                <td>
-                                                    { data?.checkin_time.split( 'T' )[ 0 ] } { data?.checkin_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }
-                                                </td>
-                                                <td>{ data?.late_duration }</td>
-                                            </tr>
-                                        )
-                                    } )
-                                }
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col md={ 7 } className='mb-3'>
-                        <Table responsive>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Keluar</th>
-                                    <th>Keluar Cepat</th>
-                                    <th>Lembur</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    absensiKeluar?.map( ( data, index ) =>
-                                    {
-                                        return (
-                                            <tr key={ index }>
-                                                <td>{ index + 1 }</td>
-                                                <td>
-                                                    { data?.checkout_time.split( 'T' )[ 0 ] } { data?.checkout_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }
-                                                </td>
-                                                <td>{ data?.early_duration }</td>
-                                                <td>{ data?.overtime_duration }</td>
-                                            </tr>
-                                        )
-                                    } )
-                                }
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
+                <Tabs
+                    defaultActiveKey="masuk"
+                    id="justify-tab-example"
+                    className="mb-3"
+                    justify
+                >
+                    <Tab eventKey="masuk" title="Absensi Masuk">
+                        <TabAbsenMasuk
+                            userDetail={ userDetail }
+                            absensiMasuk={ absensiMasuk }
+                            handleAbsensiDetail={ handleAbsensiDetail }
+                            formattedTotalLateDuration={ formattedTotalLateDuration }
+                        />
+                    </Tab>
+                    <Tab eventKey="keluar" title="Absensi Keluar">
+                        <TabAbsenKeluar
+                            userDetail={ userDetail }
+                            absensiKeluar={ absensiKeluar }
+                            formattedTotalEarlyDuration={ formattedTotalEarlyDuration }
+                            formattedTotalOverDuration={ formattedTotalOverDuration }
+                        />
+                    </Tab>
+                </Tabs>
                 <div className='my-3' style={ { fontFamily: 'Poppins-Regular' } }>
                     <h5>Total Keterlambatan : { formattedTotalLateDuration }</h5>
                     <h5>Total Keluar Cepat : { formattedTotalEarlyDuration }</h5>
                     <h5>Total Lembur : { formattedTotalOverDuration }</h5>
-                </div>
+                </div> 
             </Container>
         </>
     )

@@ -12,7 +12,6 @@ function Hrd ()
     const [ location, setLocation ] = useState( null );
     const tokenUser = tokens?.token;
 
-
     const handleSubmitAbsen = async ( event ) =>
     {
         event.preventDefault()
@@ -20,7 +19,7 @@ function Hrd ()
             checkin_location: `POINT(${location?.longitude} ${location?.latitude})`,
             user: userInfo?.id,
         }
-        // console.log( finaldata )
+
         try {
             const response = await axios.post( `/api/checkin/`, finaldata,
                 {
@@ -29,6 +28,7 @@ function Hrd ()
                     },
                 }
             );
+
             Swal.fire( {
                 icon: 'success',
                 title: 'Absensi Masuk Berhasil',
@@ -37,7 +37,22 @@ function Hrd ()
             } )
 
         } catch ( err ) {
-            console.log( err )
+            if ( !err?.response ) {
+                Swal.fire( {
+                    icon: 'error',
+                    title: 'Warning!',
+                    text: 'Terjadi kesalahan saat Absen Masuk',
+                } )
+            } else if ( err.response?.status === 400 ) {
+                let str = err.response?.data.error;
+                let str2 = str.replace( /\[|\]|\'/g, "" );
+                Swal.fire( {
+                    icon: 'error',
+                    title: 'Warning!',
+                    text: str2,
+                } );
+
+            }
         }
     }
 
@@ -45,10 +60,9 @@ function Hrd ()
     {
         event.preventDefault()
         const finaldata = {
-            checkin_location: `POINT(${location?.longitude} ${location?.latitude})`,
+            checkout_location: `POINT(${location?.longitude} ${location?.latitude})`,
             user: userInfo?.id,
         }
-        // console.log( finaldata )
         try {
             const response = await axios.post( `/api/checkout/`, finaldata,
                 {
@@ -65,14 +79,28 @@ function Hrd ()
             } )
 
         } catch ( err ) {
-            console.log( err )
+            if ( !err?.response ) {
+                Swal.fire( {
+                    icon: 'error',
+                    title: 'Warning!',
+                    text: 'Terjadi kesalahan saat Absen Keluar',
+                } )
+            } else if ( err.response?.status === 400 ) {
+                let str = err.response?.data.error;
+                let str2 = str.replace( /\[|\]|\'/g, "" );
+                Swal.fire( {
+                    icon: 'error',
+                    title: 'Warning!',
+                    text: str2,
+                } );
+
+            }
         }
     }
 
 
     useEffect( () =>
     {
-        // Check if the Geolocation API is available
         if ( 'geolocation' in navigator ) {
             navigator.geolocation.getCurrentPosition(
                 ( position ) =>
@@ -89,8 +117,6 @@ function Hrd ()
             console.error( 'Geolocation is not supported by your browser' );
         }
     }, [] );
-
-    // console.log( location )
 
     return (
         <>

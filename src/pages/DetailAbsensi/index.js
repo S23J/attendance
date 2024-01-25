@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import NavbarComponent from '../../component/Navbar';
-import { Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import LocationMarker from '../../component/MapsReader';
@@ -12,7 +12,9 @@ function DetailAbsensi ()
     const tokenUser = tokens?.token;
     const { absenid } = useParams();
     const [ detailAbsenMasuk, setDetailAbsenMasuk ] = useState();
+    const [ detailLokasiMasuk, setDetailLokasiMasuk ] = useState();
     const [ detailAbsenKeluar, setDetailAbsenKeluar ] = useState();
+    const [ detailLokasiKeluar, setDetailLokasiKeluar ] = useState();
     const [ done, setDone ] = useState( undefined );
 
     useEffect( () =>
@@ -42,7 +44,7 @@ function DetailAbsensi ()
             } )
             .then( res =>
             {
-
+                setDetailAbsenMasuk( res.data )
                 const [ longitude, latitude ] = res.data.checkin_location
                     .match( /POINT \(([-0-9.]+) ([-0-9.]+)\)/ )
                     .slice( 1 )
@@ -51,13 +53,13 @@ function DetailAbsensi ()
                 {
                     setDone( true );
                 }, 2000 );
-                setDetailAbsenMasuk( { ...res.data, longitude, latitude } );
-                // setDetailAbsenMasuk( res.data )
-                // console.log(  )
+                setDetailLokasiMasuk( { longitude, latitude } );
+
+                // console.log( res.data )
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -75,6 +77,7 @@ function DetailAbsensi ()
             .then( res =>
             {
 
+                setDetailAbsenKeluar( res.data )
                 const [ longitude, latitude ] = res.data.checkout_location
                     .match( /POINT \(([-0-9.]+) ([-0-9.]+)\)/ )
                     .slice( 1 )
@@ -83,12 +86,10 @@ function DetailAbsensi ()
                 {
                     setDone( true );
                 }, 2000 );
-                setDetailAbsenKeluar( { ...res.data, longitude, latitude } );
-                // console.log( res.data )
+                setDetailLokasiKeluar( { longitude, latitude } );
             } ).catch( err =>
             {
-
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -96,9 +97,9 @@ function DetailAbsensi ()
     return (
         <>
             <NavbarComponent />
-            <h1 className='display-6 text-center'>Detail Absensi</h1>
+            <h1 className='display-6 text-center' style={ { fontFamily: 'Poppins-Light' } }>Detail Absensi</h1>
             <Container className='mt-5'>
-                <h5 className='text-center'>Absen Masuk</h5>
+                <h5 className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>Absen Masuk</h5>
                 { !done ? (
                     <div className='text-center'>
                         <Spinner animation="border" size='lg' className='my-4' style={ { color: '#12B3ED' } } />
@@ -107,18 +108,30 @@ function DetailAbsensi ()
                 ) : (
                     <>
                         { !detailAbsenMasuk ? (
-                            <p className='text-center mt-5'>Maaf, user ini belum melakukan absen masuk</p>
+                                <Alert variant="danger" className='text-center mt-5'>
+                                    <Alert.Heading style={ { fontFamily: 'Poppins-SemiBold' } }>
+                                        Maaf, user ini belum melakukan absen masuk
+                                    </Alert.Heading>
+                                </Alert>
                         ) : (
                             <Row className='mt-5'>
-                                <Col md={ 6 }>
+                                        <Col md={ 6 } style={ { fontFamily: 'Poppins-Regular' } }>
                                     <p>Waktu: { detailAbsenMasuk?.checkin_time.split( 'T' )[ 0 ] } { detailAbsenMasuk?.checkin_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }</p>
                                     <p>Keterlambatan: { detailAbsenMasuk?.late_duration }</p>
                                 </Col>
                                 <Col md={ 6 } className='text-center'>
-                                    { detailAbsenMasuk?.latitude && detailAbsenMasuk?.longitude ? (
-                                        <LocationMarker latitude={ detailAbsenMasuk.latitude } longitude={ detailAbsenMasuk.longitude } />
+                                            { !detailLokasiMasuk ? (
+                                                <Alert variant="danger" style={ { minHeight: '200px' } }>
+                                                    <Alert.Heading style={ { fontFamily: 'Poppins-SemiBold' } }>
+                                                        Lokasi user tidak ditemukan!
+                                                    </Alert.Heading>
+                                                    <p className='mt-5' style={ { fontFamily: 'Poppins-Regular' } }>
+                                                        Pastikan user sebelum absen masuk menghidupkan GPS, dan menyetujui permintaan
+                                                        dari Browser untuk menggunakan Lokasi Terkini.
+                                                    </p>
+                                                </Alert>
                                     ) : (
-                                        <Spinner animation="border" size='lg' className='my-4' style={ { color: '#12B3ED' } } />
+                                                    <LocationMarker latitude={ detailLokasiMasuk.latitude } longitude={ detailLokasiMasuk.longitude } />
                                     ) }
                                 </Col>
                             </Row>
@@ -127,28 +140,40 @@ function DetailAbsensi ()
                 ) }
             </Container>
             <Container className='mt-5'>
-                <h5 className='text-center'>Absen Keluar</h5>
+                <h5 className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>Absen Keluar</h5>
                 { !done ? (
                     <div className='text-center'>
                         <Spinner animation="border" size='lg' className='my-4' style={ { color: '#12B3ED' } } />
                     </div>
+
                 ) : (
                     <>
                         { !detailAbsenKeluar ? (
-                            <p className='text-center mt-5'>Maaf, user ini belum melakukan absen keluar</p>
-                        ) : (
-
+                                <Alert variant="danger" className='text-center mt-5'>
+                                    <Alert.Heading style={ { fontFamily: 'Poppins-SemiBold' } }>
+                                        Maaf, user ini belum melakukan absen keluar
+                                    </Alert.Heading>
+                                </Alert>
+                            ) : (
                             <Row className='mt-5'>
-                                <Col md={ 6 }>
+                                        <Col md={ 6 } style={ { fontFamily: 'Poppins-Regular' } }>
                                     <p>Waktu: { detailAbsenKeluar?.checkout_time.split( 'T' )[ 0 ] } { detailAbsenKeluar?.checkout_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }</p>
                                     <p>Keluar Cepat: { detailAbsenKeluar?.early_duration }</p>
                                     <p>Lembur: { detailAbsenKeluar?.overtime_duration }</p>
                                 </Col>
                                 <Col md={ 6 } className='text-center'>
-                                    { detailAbsenKeluar?.latitude && detailAbsenKeluar?.longitude ? (
-                                        <LocationMarker latitude={ detailAbsenKeluar?.latitude } longitude={ detailAbsenKeluar?.longitude } />
+                                            { !detailLokasiKeluar ? (
+                                                <Alert variant="danger" style={ { minHeight: '200px' } }>
+                                                    <Alert.Heading style={ { fontFamily: 'Poppins-SemiBold' } }>
+                                                        Lokasi user tidak ditemukan!
+                                                    </Alert.Heading>
+                                                    <p className='mt-5' style={ { fontFamily: 'Poppins-Regular' } }>
+                                                        Pastikan user sebelum absen keluar menghidupkan GPS, dan menyetujui permintaan
+                                                        dari Browser untuk menggunakan Lokasi Terkini.
+                                                    </p>
+                                                </Alert>
                                     ) : (
-                                        <Spinner animation="border" size='lg' className='my-4' style={ { color: '#12B3ED' } } />
+                                                    <LocationMarker latitude={ detailLokasiKeluar.latitude } longitude={ detailLokasiKeluar.longitude } />
                                     ) }
                                 </Col>
                             </Row>
