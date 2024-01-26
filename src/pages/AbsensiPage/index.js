@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import NavbarComponent from '../../component/Navbar'
-import { Button, Col, Container, Row, Table } from 'react-bootstrap'
+import { Container, Tab, Tabs } from 'react-bootstrap'
 import axios from '../../adapters/API/axios';
 import AuthContext from '../../auth/Context/AuthContext';
-import { GoInfo } from "react-icons/go";
+import TabAbsenMasukKaryawan from '../../component/TabsAbsensi/TabAbsenMasukKaryawan';
+import TabAbsenKeluarKaryawan from '../../component/TabsAbsensi/TabAbsenKeluarKaryawan';
 
 function AbsensiPage ()
 {
@@ -64,7 +65,9 @@ function AbsensiPage ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -79,7 +82,7 @@ function AbsensiPage ()
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -89,7 +92,9 @@ function AbsensiPage ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -105,8 +110,7 @@ function AbsensiPage ()
                 // console.log( res.data )
             } ).catch( err =>
             {
-
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -117,64 +121,23 @@ function AbsensiPage ()
             <NavbarComponent />
             <h1 className='display-6 text-center' style={ { fontFamily: 'Poppins-Light' } }>Data Absensi</h1>
             <Container className='mt-5'>
-                <Row>
-                    <Col md={ 5 } className='mb-3'>
-                        <Table responsive>
-                            <thead style={ { fontFamily: 'Poppins-Regular' } }>
-                                <tr className='text-center'>
-                                    <th>#</th>
-                                    <th>Masuk</th>
-                                    <th>Keterlambatan</th>
-                                </tr>
-                            </thead>
-                            <tbody style={ { fontFamily: 'Poppins-Light' } }>
-                                {
-                                    absensiMasuk?.map( ( data, index ) =>
-                                    {
-                                        return (
-                                            <tr key={ index } className='text-center'>
-                                                <td>{ index + 1 }</td>
-                                                <td>
-                                                    { data?.checkin_time.split( 'T' )[ 0 ] } { data?.checkin_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }
-                                                </td>
-                                                <td>{ data?.late_duration }</td>
-                                            </tr>
-                                        )
-                                    } )
-                                }
-                            </tbody>
-                        </Table>
-                    </Col>
-                    <Col md={ 7 } className='mb-3'>
-                        <Table responsive>
-                            <thead style={ { fontFamily: 'Poppins-Regular' } }>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Keluar</th>
-                                    <th>Keluar Cepat</th>
-                                    <th>Lembur</th>
-                                </tr>
-                            </thead>
-                            <tbody style={ { fontFamily: 'Poppins-Light' } }>
-                                {
-                                    absensiKeluar?.map( ( data, index ) =>
-                                    {
-                                        return (
-                                            <tr key={ index }>
-                                                <td>{ index + 1 }</td>
-                                                <td>
-                                                    { data?.checkout_time.split( 'T' )[ 0 ] } { data?.checkout_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }
-                                                </td>
-                                                <td>{ data?.early_duration }</td>
-                                                <td>{ data?.overtime_duration }</td>
-                                            </tr>
-                                        )
-                                    } )
-                                }
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
+                <Tabs
+                    defaultActiveKey="masuk"
+                    id="justify-tab-example"
+                    className="mb-3"
+                    justify
+                >
+                    <Tab eventKey="masuk" title="Absensi Masuk">
+                        <TabAbsenMasukKaryawan
+                            absensiMasuk={ absensiMasuk }
+                        />
+                    </Tab>
+                    <Tab eventKey="pulang" title="Absensi Pulang">
+                        <TabAbsenKeluarKaryawan
+                            absensiKeluar={ absensiKeluar }
+                        />
+                    </Tab>
+                </Tabs>
                 <div className='my-3' style={ { fontFamily: 'Poppins-Regular' } }>
                     <h5>Total Keterlambatan : { formattedTotalLateDuration }</h5>
                     <h5>Total Keluar Cepat : { formattedTotalEarlyDuration }</h5>

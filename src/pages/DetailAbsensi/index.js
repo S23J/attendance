@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import NavbarComponent from '../../component/Navbar';
-import { Alert, Col, Container, Row, Spinner } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import LocationMarker from '../../component/MapsReader';
@@ -16,6 +16,11 @@ function DetailAbsensi ()
     const [ detailAbsenKeluar, setDetailAbsenKeluar ] = useState();
     const [ detailLokasiKeluar, setDetailLokasiKeluar ] = useState();
     const [ done, setDone ] = useState( undefined );
+    const navigate = useNavigate();
+    const handleBack = () =>
+    {
+        navigate( -1 )
+    }
 
     useEffect( () =>
     {
@@ -37,7 +42,9 @@ function DetailAbsensi ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -69,7 +76,9 @@ function DetailAbsensi ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -93,16 +102,33 @@ function DetailAbsensi ()
             } )
     };
 
-    // console.log( detailAbsenMasuk )
+
     return (
         <>
             <NavbarComponent />
-            <h1 className='display-6 text-center' style={ { fontFamily: 'Poppins-Light' } }>Detail Absensi</h1>
+            <Container>
+                <Row>
+                    <Col xs={ 6 } md={ 11 }>
+                        <h1 className='display-6 text-start my-2' style={ { fontFamily: 'Poppins-Light' } }>Detail Absensi</h1>
+                    </Col>
+                    <Col xs={ 6 } md={ 1 } className='my-auto text-end'>
+                        <Button
+                            onClick={ handleBack }
+                            variant='btn'
+                            style={ { minHeight: '50px', backgroundColor: '#696969', color: 'white', fontFamily: 'Poppins-Regular' } }
+                        >
+                            Kembali
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
+
+
             <Container className='mt-5'>
                 <h5 className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>Absen Masuk</h5>
                 { !done ? (
                     <div className='text-center'>
-                        <Spinner animation="border" size='lg' className='my-4' style={ { color: '#12B3ED' } } />
+                        <Spinner animation="border" size='lg' className='my-4' style={ { color: '#000A2E' } } />
                     </div>
 
                 ) : (
@@ -114,8 +140,8 @@ function DetailAbsensi ()
                                     </Alert.Heading>
                                 </Alert>
                         ) : (
-                            <Row className='mt-5'>
-                                        <Col md={ 6 } style={ { fontFamily: 'Poppins-Regular' } }>
+                                    <Row className='mt-5' style={ { minHeight: '300px' } }>
+                                        <Col md={ 6 } className='my-auto' style={ { fontFamily: 'Poppins-Regular' } }>
                                     <p>Waktu: { detailAbsenMasuk?.checkin_time.split( 'T' )[ 0 ] } { detailAbsenMasuk?.checkin_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }</p>
                                     <p>Keterlambatan: { detailAbsenMasuk?.late_duration }</p>
                                 </Col>
@@ -139,11 +165,11 @@ function DetailAbsensi ()
                     </>
                 ) }
             </Container>
-            <Container className='mt-5'>
+            <Container className='my-5'>
                 <h5 className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>Absen Keluar</h5>
                 { !done ? (
                     <div className='text-center'>
-                        <Spinner animation="border" size='lg' className='my-4' style={ { color: '#12B3ED' } } />
+                        <Spinner animation="border" size='lg' className='my-4' style={ { color: '#000A2E' } } />
                     </div>
 
                 ) : (
@@ -151,14 +177,14 @@ function DetailAbsensi ()
                         { !detailAbsenKeluar ? (
                                 <Alert variant="danger" className='text-center mt-5'>
                                     <Alert.Heading style={ { fontFamily: 'Poppins-SemiBold' } }>
-                                        Maaf, user ini belum melakukan absen keluar
+                                        Maaf, user ini belum melakukan absen pulang
                                     </Alert.Heading>
                                 </Alert>
                             ) : (
-                            <Row className='mt-5'>
-                                        <Col md={ 6 } style={ { fontFamily: 'Poppins-Regular' } }>
+                                    <Row className='mt-5' style={ { minHeight: '300px' } }>
+                                        <Col md={ 6 } className='my-auto' style={ { fontFamily: 'Poppins-Regular' } }>
                                     <p>Waktu: { detailAbsenKeluar?.checkout_time.split( 'T' )[ 0 ] } { detailAbsenKeluar?.checkout_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }</p>
-                                    <p>Keluar Cepat: { detailAbsenKeluar?.early_duration }</p>
+                                            <p>Pulang Awal: { detailAbsenKeluar?.early_duration }</p>
                                     <p>Lembur: { detailAbsenKeluar?.overtime_duration }</p>
                                 </Col>
                                 <Col md={ 6 } className='text-center'>

@@ -25,6 +25,9 @@ function Home ()
             const response = await axios.post( `/api/checkin/`, finaldata,
                 {
                     headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        withCredentials: true,
                         Authorization: `Token ` + tokenUser,
                     },
                 }
@@ -67,11 +70,14 @@ function Home ()
             const response = await axios.post( `/api/checkout/`, finaldata,
                 {
                     headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        withCredentials: true,
                         Authorization: `Token ` + tokenUser,
                     },
                 }
             );
-            console.log( response )
+            // console.log( response )
             Swal.fire( {
                 icon: 'success',
                 title: 'Absensi Keluar Berhasil',
@@ -153,7 +159,7 @@ function Home ()
                                         <p className='pt-2'>
                                             Absen
                                             <br />
-                                            <span> Keluar</span>
+                                            <span> Pulang</span>
                                         </p>
                                     </Col>
                                 </Row>

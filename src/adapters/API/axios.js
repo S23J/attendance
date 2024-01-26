@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default axios.create(
     {
-        baseURL: `http://192.168.0.41:8000`,
+        baseURL: `//192.168.0.41:8000`,
         headers: {
             post: {
                 'Access-Control-Allow-Origin': '*',
@@ -10,7 +10,7 @@ export default axios.create(
                 withCredentials: true,
             }
         }
-        // baseURL: `https://flashklik-analytic.com/`,
+        // baseURL: `https://aea8-180-245-80-61.ngrok-free.app`,
         // headers: {
         //     post: {
         //         'Access-Control-Allow-Origin': '*',

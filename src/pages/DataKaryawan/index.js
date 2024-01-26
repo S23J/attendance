@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import NavbarComponent from '../../component/Navbar'
-import { Button, Col, Container, Row, Table } from 'react-bootstrap'
+import { Button, Col, Container, Row } from 'react-bootstrap'
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import { GoInfo } from 'react-icons/go';
@@ -32,12 +32,15 @@ function DataKaryawan ()
 
     const fetchListUser = () =>
     {
-        axios.get( `api/users/`,
+        axios.get( `/api/users/`,
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
+                    "ngrok-skip-browser-warning": true,
                 },
 
             } )
@@ -45,10 +48,10 @@ function DataKaryawan ()
             {
 
                 setListUser( res.data );
+                // console.log( res.data )
             } ).catch( err =>
             {
-
-                console.log( err )
+                // console.log( err )
             } )
     };
 

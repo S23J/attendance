@@ -9,18 +9,25 @@ import AbsensiPage from './pages/AbsensiPage';
 import DataKaryawan from './pages/DataKaryawan';
 import DetailKaryawan from './pages/DetailKaryawan';
 import DetailAbsensi from './pages/DetailAbsensi';
+import PrivateRoutes from './auth/PrivateRoute';
+import PrintPageAbsenMasuk from './pages/PrintPage/PrintPageAbsenMasuk';
+import PrintPageAbsenKeluar from './pages/PrintPage/PrintPageAbsenKeluar';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={ <Login /> } />
-        <Route path='/home/' element={ <Home /> } />
-        <Route path='/hrd/' element={ <Hrd /> } />
-        <Route path='/data-absensi/' element={ <AbsensiPage /> } />
-        <Route path='/data-karyawan/' element={ <DataKaryawan /> } />
-        <Route path='/detail-absensi/:absenid/' element={ <DetailAbsensi /> } />
-        <Route path='/detail-karyawan/:karyawanid/' element={ <DetailKaryawan /> } />
+        <Route element={ <PrivateRoutes /> }>
+          <Route element={ <Home /> } path='/home/' />
+          <Route path='/hrd/' element={ <Hrd /> } />
+          <Route path='/data-absensi/' element={ <AbsensiPage /> } />
+          <Route path='/data-karyawan/' element={ <DataKaryawan /> } />
+          <Route path='/detail-absensi/:absenid/' element={ <DetailAbsensi /> } />
+          <Route path='/detail-karyawan/:karyawanid/' element={ <DetailKaryawan /> } />
+          <Route path='/absen-masuk/:karyawanid/' element={ <PrintPageAbsenMasuk /> } />
+          <Route path='/absen-keluar/:karyawanid/' element={ <PrintPageAbsenKeluar /> } />
+        </Route>
       </Routes>
     </BrowserRouter>
   )

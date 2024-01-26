@@ -24,6 +24,9 @@ function Hrd ()
             const response = await axios.post( `/api/checkin/`, finaldata,
                 {
                     headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Content-Type': 'application/json',
+                        withCredentials: true,
                         Authorization: `Token ` + tokenUser,
                     },
                 }
@@ -152,7 +155,7 @@ function Hrd ()
                                         <p className='pt-2'>
                                             Absen
                                             <br />
-                                            <span> Keluar</span>
+                                            <span> Pulang</span>
                                         </p>
                                     </Col>
                                 </Row>

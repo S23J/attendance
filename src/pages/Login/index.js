@@ -70,12 +70,12 @@ function Login ()
             // console.log( response.data )
 
         } catch ( err ) {
-            console.log( err )
+            // console.log( err )
             if ( !err?.response ) {
                 Swal.fire( {
                     icon: 'error',
                     title: 'Warning!',
-                    text: 'Server not responding',
+                    text: 'Server tidak ada respon',
                 } )
                 setIsSubmittingLogin( false );
                 setDisabled( false );
@@ -84,6 +84,14 @@ function Login ()
                     icon: 'error',
                     title: 'Warning!',
                     text: `${err.response?.data.non_field_errors}`,
+                } )
+                setIsSubmittingLogin( false );
+                setDisabled( false );
+            } else if ( err.response?.status === 401 ) {
+                Swal.fire( {
+                    icon: 'error',
+                    title: 'Warning!',
+                    text: `Periksa kembali Username dan Password anda`,
                 } )
                 setIsSubmittingLogin( false );
                 setDisabled( false );

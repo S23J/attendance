@@ -4,15 +4,23 @@ import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import { BsPrinter } from "react-icons/bs";
 import { GoInfo } from 'react-icons/go';
 import { ActionIcon, Box, Flex } from '@mantine/core';
-import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 function TabAbsenMasuk ( {
     absensiMasuk,
+    karyawanid,
     userDetail,
     formattedTotalLateDuration,
     handleAbsensiDetail
 } )
 {
+
+    const navigate = useNavigate();
+
+    const printAbsensi = () =>
+    {
+        navigate( "/absen-masuk/" + karyawanid + "/" );
+    }
 
     const columns = useMemo(
         () => [
@@ -125,6 +133,7 @@ function TabAbsenMasuk ( {
             <Flex gap="xs" align="center">
                 {/* add custom button to print table  */ }
                 <ActionIcon
+                    onClick={ printAbsensi }
                 >
                     <BsPrinter
                         style={ { backgroundColor: 'transparent', color: '#222' } }

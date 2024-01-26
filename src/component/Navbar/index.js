@@ -8,14 +8,14 @@ import axios from '../../adapters/API/axios';
 
 function NavbarComponent ()
 {
-    const { groups, setGroups, tokens, setTokens, setUserInfo, userInfo } = useContext( AuthContext );
+    const { groups, setGroups, tokens, setTokens, setUserInfo } = useContext( AuthContext );
     const navigate = useNavigate();
 
     const LogoutSession = async () =>
     {
         const confirmDelete = await Swal.fire( {
             title: 'Apakah anda yakin ingin keluar?',
-            icon: 'warning',
+            icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Keluar',
             cancelButtonText: 'Batal',
@@ -46,17 +46,17 @@ function NavbarComponent ()
             setGroups();
             Swal.fire( {
                 icon: 'success',
-                title: 'Logout Success',
+                title: 'Logout Berhasil',
                 showConfirmButton: false,
                 timer: 2000,
             } );
             navigate( '/' );
         } catch ( error ) {
-            console.log( error );
+            // console.log( error );
             Swal.fire( {
                 icon: 'error',
                 title: 'Warning!',
-                text: 'Logout failed, something is wrong!',
+                text: 'Logout gagal!',
             } );
         }
     };

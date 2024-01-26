@@ -1,7 +1,6 @@
 import React from 'react';
 import * as FileSaver from 'file-saver';
 import XLSX from 'sheetjs-style';
-import { Button } from 'react-bootstrap';
 import { RiFileExcel2Line } from "react-icons/ri";
 
 const ExportExcel = ( props ) =>
@@ -21,13 +20,6 @@ const ExportExcel = ( props ) =>
 
     return (
         <>
-            {/* <Button
-                onClick={ ( e ) => exportToExcel( props.fileName ) }
-                variant="outline-success"
-                style={ { minHeight: '50px', fontFamily: 'Poppins-Medium' } }
-            >
-                Excel <FaFileExcel size={ 20 } />
-            </Button> */}
             <RiFileExcel2Line
                 style={ { backgroundColor: 'transparent', color: 'green' } }
                 size={ 40 }

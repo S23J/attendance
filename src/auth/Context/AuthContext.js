@@ -4,58 +4,68 @@ const AuthContext = createContext( {} );
 
 export const AuthProvider = ( { children } ) =>
 {
-    const [ userInfo, setUserInfo ] = useState();
-    const [ groups, setGroups ] = useState();
-    const [ tokens, setTokens ] = useState();
+    const [ userInfo, setUserInfo ] = useState( null );
+    const [ groups, setGroups ] = useState( null );
+    const [ tokens, setTokens ] = useState( null );
     const [ showSidebar, setShowSidebar ] = useState( true );
+
     const toggleSidebar = () =>
     {
         setShowSidebar( !showSidebar );
     };
-    const isLoggedIn = async () =>
-    {
-        try {
 
-            let user_info = await window.sessionStorage.getItem( "userInfo" )
-            user_info = JSON.parse( user_info )
-            let user_group = await window.sessionStorage.getItem( "groups" )
-            user_group = JSON.parse( user_group )
-
-            if ( user_info ) {
-                setUserInfo( user_info )
-            }
-
-            if ( user_group ) {
-                setGroups( user_group )
-            }
-
-
-            let token = await window.sessionStorage.getItem( "token" )
-            // console.log( token )
-            let tokenij = JSON.parse( token )
-
-            if ( tokenij ) {
-
-                setTokens( tokenij )
-            }
-
-        } catch ( e ) {
-
-        }
-    }
-    // console.log( tokens )
     useEffect( () =>
     {
-        isLoggedIn()
-    }, [] )
+        const isLoggedIn = async () =>
+        {
+            try {
+                let user_info = window.sessionStorage.getItem( "userInfo" );
+                let user_group = window.sessionStorage.getItem( "groups" );
+                let token = window.sessionStorage.getItem( "token" );
 
-    // console.log( groups )
+                if ( user_info ) {
+                    setUserInfo( JSON.parse( user_info ) );
+                }
+                if ( user_group ) {
+                    setGroups( JSON.parse( user_group ) );
+                }
+                if ( token ) {
+                    setTokens( JSON.parse( token ) );
+                }
+            } catch ( error ) {
+                console.error( "Error while fetching user data", error );
+            }
+        };
+
+        isLoggedIn();
+    }, [] );
+
+    useEffect( () =>
+    {
+        if ( userInfo || groups || tokens ) {
+            window.sessionStorage.setItem( "userInfo", JSON.stringify( userInfo ) );
+            window.sessionStorage.setItem( "groups", JSON.stringify( groups ) );
+            window.sessionStorage.setItem( "token", JSON.stringify( tokens ) );
+        }
+    }, [ userInfo, groups, tokens ] );
 
     return (
-        <AuthContext.Provider value={ { userInfo, setUserInfo, tokens, setTokens, showSidebar, setShowSidebar, toggleSidebar, groups, setGroups } }>
+        <AuthContext.Provider
+            value={ {
+                userInfo,
+                setUserInfo,
+                tokens,
+                setTokens,
+                showSidebar,
+                setShowSidebar,
+                toggleSidebar,
+                groups,
+                setGroups,
+            } }
+        >
             { children }
         </AuthContext.Provider>
-    )
-}
+    );
+};
 
 export default AuthContext;

@@ -1,25 +1,10 @@
-import { ActionIcon, Box, Flex } from '@mantine/core';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import React, { useMemo } from 'react'
-import ExportExcel from '../../ExportExcel';
-import { BsPrinter } from 'react-icons/bs';
-import { useNavigate } from 'react-router-dom';
 
-function TabAbsenKeluar ( {
-    userDetail,
-    karyawanid,
-    absensiKeluar,
-    formattedTotalEarlyDuration,
-    formattedTotalOverDuration,
+function TabAbsenKeluarKaryawan ( {
+    absensiKeluar
 } )
 {
-
-    const navigate = useNavigate();
-
-    const printAbsensi = () =>
-    {
-        navigate( "/absen-keluar/" + karyawanid + "/" );
-    }
 
     const columns2 = useMemo(
         () => [
@@ -78,25 +63,6 @@ function TabAbsenKeluar ( {
         [],
     );
 
-
-    const handleExportRowsExcelData2 = () =>
-    {
-        const excelData = table2.getRowModel().rows.map( ( row ) =>
-        {
-            const { original } = row;
-            return {
-                'Absen Keluar': original.checkout_time,
-                'Pulang Awal': original.early_duration,
-                'Lembur': original.overtime_duration,
-                'Total Pulang Awal': formattedTotalEarlyDuration,
-                'Total Lembur': formattedTotalOverDuration,
-            };
-        } );
-
-        return excelData;
-    };
-
-
     const table2 = useMantineReactTable( {
         columns: columns2,
         enableDensityToggle: false,
@@ -110,36 +76,6 @@ function TabAbsenKeluar ( {
         mantineTableProps: {
             striped: true,
         },
-        renderTopToolbarCustomActions: ( { table } ) => (
-            <Box
-                sx={ {
-                    display: 'flex',
-                    gap: '16px',
-                    padding: '8px',
-                    flexWrap: 'wrap',
-                } }
-            >
-            </Box>
-        ),
-        renderToolbarInternalActions: ( { table } ) => (
-            <Flex gap="xs" align="center">
-                {/* add custom button to print table  */ }
-                <ActionIcon
-                    onClick={ printAbsensi }
-                >
-                    <BsPrinter
-                        style={ { backgroundColor: 'transparent', color: '#222' } }
-                        size={ 40 }
-                    />
-                </ActionIcon>
-                <ActionIcon>
-                    <ExportExcel
-                        excelData={ handleExportRowsExcelData2( table.getRowModel().rows ) }
-                        fileName={ `Data Absensi Pulang ${userDetail?.first_name} ${userDetail?.last_name}` }
-                    />
-                </ActionIcon>
-            </Flex>
-        ),
     } );
 
     return (
@@ -151,4 +87,4 @@ function TabAbsenKeluar ( {
     )
 }
 
-export default TabAbsenKeluar
+export default TabAbsenKeluarKaryawan

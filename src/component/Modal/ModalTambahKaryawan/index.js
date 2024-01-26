@@ -75,7 +75,9 @@ function ModalTambahKaryawan ( {
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -131,7 +133,7 @@ function ModalTambahKaryawan ( {
             groups: [ selectedGroup?.value ],
         } );
 
-        console.log( { finalData } );
+        // console.log( { finalData } );
         try {
             const responseUser = await axios.post( '/api/users/', finalData,
                 {
@@ -143,7 +145,7 @@ function ModalTambahKaryawan ( {
                     },
                 }
             );
-            console.log( responseUser )
+            // console.log( responseUser )
             const combinedData = {
                 phone: no_telp,
                 picture: imagePerson,
@@ -160,9 +162,9 @@ function ModalTambahKaryawan ( {
                         },
                     }
                 );
-                console.log( responseUEmployee );
+                // console.log( responseUEmployee );
             } catch ( err ) {
-                console.log( err )
+                // console.log( err )
             }
             fetchListUser();
             handleCloseAddKaryawan();
@@ -174,7 +176,7 @@ function ModalTambahKaryawan ( {
             } )
             setDisabled( false );
         } catch ( err ) {
-            console.log( err )
+            // console.log( err )
             Swal.fire( {
                 icon: 'warning',
                 title: 'Terjadi kesalahan saat menambahkan karyawan!',
@@ -193,7 +195,7 @@ function ModalTambahKaryawan ( {
             keyboard={ false }
         >
             <Modal.Header closeButton>
-                <Modal.Title>
+                <Modal.Title style={ { fontFamily: 'Poppins-Medium' } }>
                     Tambah Karyawan
                 </Modal.Title>
             </Modal.Header>
@@ -334,7 +336,7 @@ function ModalTambahKaryawan ( {
                                 >
                                     { passwordShown ? "Hide " : "Show " }
                                     password
-                                    <span >
+                                    <span>
                                         { passwordShown
                                             ?
                                             <IoEyeOffSharp />
@@ -365,7 +367,7 @@ function ModalTambahKaryawan ( {
                                     style={ { color: '#363636', fontFamily: 'Poppins-Regular', cursor: 'pointer', maxWidth: '150px' } }
                                 >
                                     { confirmPwdShown ? "Hide " : "Show " }
-                                    password
+                                    password 
                                     <span >
                                         { confirmPwdShown
                                             ?

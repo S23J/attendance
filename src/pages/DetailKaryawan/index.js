@@ -43,7 +43,6 @@ function DetailKaryawan ()
             if ( karyawanid !== undefined && tokenUser !== undefined ) {
 
                 await fetchUserDetail();
-
                 await fetchEmployeeDetail();
                 await fetchListAbsensiMasuk();
                 await fetchListAbsensiKeluar();
@@ -83,7 +82,9 @@ function DetailKaryawan ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -93,10 +94,11 @@ function DetailKaryawan ()
 
                 setUserDetail( res.data );
                 fetchListGroup( res.data );
+                // console.log( res.data )
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -106,7 +108,9 @@ function DetailKaryawan ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -115,11 +119,11 @@ function DetailKaryawan ()
             {
 
                 setEmployeeDetail( res.data );
-
+                // console.log( res.data )
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -130,7 +134,9 @@ function DetailKaryawan ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -143,11 +149,11 @@ function DetailKaryawan ()
 
                 setListGroup( filteredGroup[ 0 ] );
 
-
+                // console.log( res.data )
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -157,7 +163,9 @@ function DetailKaryawan ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -168,11 +176,11 @@ function DetailKaryawan ()
                 setAbsensiMasuk( res.data );
                 const durationsLate = res.data.map( ( item ) => item.late_duration || "00:00:00" );
                 setLateDurations( durationsLate );
-
+                // console.log( res.data )
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -182,7 +190,9 @@ function DetailKaryawan ()
             {
                 headers:
                 {
-
+                    'Access-Control-Allow-Origin': '*',
+                    'Content-Type': 'application/json',
+                    withCredentials: true,
                     Authorization: `Token ` + tokenUser,
                 },
 
@@ -199,7 +209,7 @@ function DetailKaryawan ()
             } ).catch( err =>
             {
 
-                console.log( err )
+                // console.log( err )
             } )
     };
 
@@ -237,14 +247,16 @@ function DetailKaryawan ()
                 >
                     <Tab eventKey="masuk" title="Absensi Masuk">
                         <TabAbsenMasuk
+                            karyawanid={ karyawanid }
                             userDetail={ userDetail }
                             absensiMasuk={ absensiMasuk }
                             handleAbsensiDetail={ handleAbsensiDetail }
                             formattedTotalLateDuration={ formattedTotalLateDuration }
                         />
                     </Tab>
-                    <Tab eventKey="keluar" title="Absensi Keluar">
+                    <Tab eventKey="pulang" title="Absensi Pulang">
                         <TabAbsenKeluar
+                            karyawanid={ karyawanid }
                             userDetail={ userDetail }
                             absensiKeluar={ absensiKeluar }
                             formattedTotalEarlyDuration={ formattedTotalEarlyDuration }
@@ -254,7 +266,7 @@ function DetailKaryawan ()
                 </Tabs>
                 <div className='my-3' style={ { fontFamily: 'Poppins-Regular' } }>
                     <h5>Total Keterlambatan : { formattedTotalLateDuration }</h5>
-                    <h5>Total Keluar Cepat : { formattedTotalEarlyDuration }</h5>
+                    <h5>Total Pulang Awal : { formattedTotalEarlyDuration }</h5>
                     <h5>Total Lembur : { formattedTotalOverDuration }</h5>
                 </div> 
             </Container>

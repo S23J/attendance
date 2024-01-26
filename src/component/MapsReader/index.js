@@ -22,8 +22,18 @@ const LocationMarker = ( { latitude, longitude } ) =>
         const fetchPlaceName = async () =>
         {
             try {
-                const response = await axios.get(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                // const response = await axios.get(
+                //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+
+                // );
+                const response = await axios.get( `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+                    {
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            'Content-Type': 'application/json',
+                            withCredentials: true,
+                        },
+                    }
                 );
 
                 const { display_name } = response.data;
@@ -41,7 +51,7 @@ const LocationMarker = ( { latitude, longitude } ) =>
         <MapContainer
             center={ position }
             zoom={ 20 }
-            style={ { height: '200px', width: '100%' } }
+            style={ { height: '300px', width: '100%', borderRadius: '20px' } }
         >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
