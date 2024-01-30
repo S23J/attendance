@@ -6,6 +6,7 @@ import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import { useNavigate } from 'react-router-dom';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import instance from '../../adapters/API/axios';
 
 function Login ()
 {
@@ -34,16 +35,19 @@ function Login ()
             password: password,
         }
         try {
-            const response = await axios.post( `/api/login/`, data,
+            const response = await instance.post( `/api/login/`, data,
                 {
                     headers: {
                         'Access-Control-Allow-Origin': '*',
                         'Content-Type': 'application/json',
                         withCredentials: true,
                     },
+                    httpsAgent: {
+                        rejectUnauthorized: false,
+                    }
                 }
-            );
 
+            );
             const userInfo = response?.data.user
             const userToken = response?.data
             const userGroups = response?.data.groups
@@ -62,7 +66,7 @@ function Login ()
             setIsSubmittingLogin( false );
             setDisabled( false );
 
-            if ( userGroups.includes( 'hrd' ) || userGroups.includes( 'super_user' ) ) {
+            if ( userGroups.includes( 'HRD & GA' ) || userGroups.includes( 'super_user' ) ) {
                 navigate( '/hrd/' )
             } else {
                 navigate( '/home/' )

@@ -1,21 +1,38 @@
+// import axios from 'axios';
+
+
+// export default axios.create(
+//     {
+//         baseURL: `https://192.168.2.91`,
+
+//         headers: {
+//             post: {
+//                 'Access-Control-Allow-Origin': '*',
+//                 'Content-Type': 'application/json',
+//                 withCredentials: true,
+//             }
+//         },
+//         httpsAgent: {
+//             rejectUnauthorized: false,
+//         }
+
+//     } );
+
+
 import axios from 'axios';
 
-export default axios.create(
-    {
-        baseURL: `//192.168.0.41:8000`,
-        headers: {
-            post: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-                withCredentials: true,
-            }
+const instance = axios.create( {
+    baseURL: `https://192.168.2.91`,
+    headers: {
+        post: {
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            withCredentials: true,
         }
-        // baseURL: `https://aea8-180-245-80-61.ngrok-free.app`,
-        // headers: {
-        //     post: {
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Content-Type': 'application/json',
-        //         withCredentials: true,
-        //     }
-        // }
-    } );
+    },
+    httpsAgent: {
+        rejectUnauthorized: false,
+    }
+} );
+
+export default instance;

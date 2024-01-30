@@ -5,6 +5,7 @@ import { Alert, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import LocationMarker from '../../component/MapsReader';
+import instance from '../../adapters/API/axios';
 
 function DetailAbsensi ()
 {
@@ -38,7 +39,7 @@ function DetailAbsensi ()
 
     const fetchListAdetailAbsenMasuk = () =>
     {
-        axios.get( `/api/checkin_detail/${absenid}`,
+        instance.get( `/api/checkin_detail/${absenid}`,
             {
                 headers:
                 {
@@ -72,7 +73,7 @@ function DetailAbsensi ()
 
     const fetchListAdetailAbsenKeluar = () =>
     {
-        axios.get( `/api/checkout_detail/${absenid}`,
+        instance.get( `/api/checkout_detail/${absenid}`,
             {
                 headers:
                 {

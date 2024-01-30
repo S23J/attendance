@@ -5,6 +5,7 @@ import AuthContext from '../../auth/Context/AuthContext';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from '../../adapters/API/axios';
+import instance from '../../adapters/API/axios';
 
 function NavbarComponent ()
 {
@@ -26,7 +27,7 @@ function NavbarComponent ()
             return;
         }
         try {
-            await axios.post(
+            await instance.post(
                 '/api/logout/',
                 {},
                 {
@@ -89,7 +90,7 @@ function NavbarComponent ()
                     </Offcanvas.Header>
                     <Offcanvas.Body style={ { fontFamily: 'Poppins-Regular' } }>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
-                            { groups?.includes( 'hrd' ) || groups?.includes( 'super_user' ) ?
+                            { groups?.includes( 'HRD & GA' ) || groups?.includes( 'super_user' ) ?
                                 (
                                     <>
                                         <NavLink

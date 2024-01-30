@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import NavbarComponent from '../../component/Navbar'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Col, Container, Image, Row, Tab, Tabs } from 'react-bootstrap';
+import { Button, Col, Container, Image, Row, Tab, Tabs } from 'react-bootstrap';
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
 import { useMediaQuery } from 'react-responsive';
 import TabAbsenMasuk from '../../component/TabsAbsensi/TabAbsenMasuk';
 import TabAbsenKeluar from '../../component/TabsAbsensi/TabAbsenKeluar';
+import instance from '../../adapters/API/axios';
 
 function DetailKaryawan ()
 {
@@ -34,6 +35,10 @@ function DetailKaryawan ()
     const handleAbsensiDetail = ( row ) =>
     {
         navigate( '/detail-absensi/' + row.id + '/' )
+    }
+    const handleBack = () =>
+    {
+        navigate( -1 )
     }
 
     useEffect( () =>
@@ -78,7 +83,7 @@ function DetailKaryawan ()
 
     const fetchUserDetail = () =>
     {
-        axios.get( `api/users/${karyawanid}`,
+        instance.get( `api/users/${karyawanid}`,
             {
                 headers:
                 {
@@ -104,7 +109,7 @@ function DetailKaryawan ()
 
     const fetchEmployeeDetail = () =>
     {
-        axios.get( `api/employee_detail/${karyawanid}`,
+        instance.get( `api/employee_detail/${karyawanid}`,
             {
                 headers:
                 {
@@ -130,7 +135,7 @@ function DetailKaryawan ()
 
     const fetchListGroup = ( user_detail ) =>
     {
-        axios.get( `/api/groups/`,
+        instance.get( `/api/groups/`,
             {
                 headers:
                 {
@@ -159,7 +164,7 @@ function DetailKaryawan ()
 
     const fetchListAbsensiMasuk = () =>
     {
-        axios.get( `/api/checkin/?user_id=${karyawanid}`,
+        instance.get( `/api/checkin/?user_id=${karyawanid}`,
             {
                 headers:
                 {
@@ -186,7 +191,7 @@ function DetailKaryawan ()
 
     const fetchListAbsensiKeluar = () =>
     {
-        axios.get( `/api/checkout/?user_id=${karyawanid}`,
+        instance.get( `/api/checkout/?user_id=${karyawanid}`,
             {
                 headers:
                 {
@@ -217,8 +222,24 @@ function DetailKaryawan ()
     return (
         <>
             <NavbarComponent />
-            <h1 className='display-6 text-center' style={ { fontFamily: 'Poppins-Light' } } >Info Detail</h1>
-            <h3 className='text-center' style={ { fontFamily: 'Poppins-Regular' } }>Nama: { userDetail?.first_name } { userDetail?.last_name }</h3>
+            <Container className='mt-4'>
+                <Row>
+                    <Col xs={ 6 } md={ 11 } className='my-auto'>
+                        <h1 className='display-6 text-start' style={ { fontFamily: 'Poppins-Light' } } >Info Detail</h1>
+
+                    </Col>
+                    <Col xs={ 6 } md={ 1 } className='text-end'>
+                        <Button
+                            onClick={ handleBack }
+                            variant='btn'
+                            style={ { minHeight: '50px', backgroundColor: '#696969', color: 'white', fontFamily: 'Poppins-Regular' } }
+                        >
+                            Kembali
+                        </Button>
+                    </Col>
+                </Row>
+            </Container>
+            <h3 className='text-center mt-3' style={ { fontFamily: 'Poppins-Regular' } }>Nama: { userDetail?.first_name } { userDetail?.last_name }</h3>
             <Container className='mt-5' style={ { maxWidth: '800px' } }>
                 <Row>
                     <Col md={ 6 } className='text-center' >

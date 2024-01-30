@@ -3,6 +3,7 @@ import AuthContext from '../../../auth/Context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../../adapters/API/axios';
 import { Container, Spinner, Table } from 'react-bootstrap';
+import instance from '../../../adapters/API/axios';
 
 function PrintPageAbsenMasuk ()
 {
@@ -78,7 +79,7 @@ function PrintPageAbsenMasuk ()
 
     const fetchUserDetail = () =>
     {
-        axios.get( `api/users/${karyawanid}`,
+        instance.get( `api/users/${karyawanid}`,
             {
                 headers:
                 {
@@ -102,7 +103,7 @@ function PrintPageAbsenMasuk ()
 
     const fetchListAdetailAbsenMasuk = () =>
     {
-        axios.get( `/api/checkin/?user_id=${karyawanid}`,
+        instance.get( `/api/checkin/?user_id=${karyawanid}`,
             {
                 headers:
                 {

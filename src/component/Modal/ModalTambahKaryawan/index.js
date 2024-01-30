@@ -7,6 +7,7 @@ import axios from '../../../adapters/API/axios';
 import { IoEyeOffSharp, IoEyeSharp } from 'react-icons/io5';
 import AuthContext from '../../../auth/Context/AuthContext';
 import Select from 'react-select';
+import instance from '../../../adapters/API/axios';
 
 
 const schema = yup.object().shape( {
@@ -52,14 +53,16 @@ function ModalTambahKaryawan ( {
     const handleImageChange = ( e ) =>
     {
         const selectedImage = e.target.files[ 0 ];
-        if ( selectedImage.size < 5000000 ) {
-            setImagePerson( selectedImage );
-        } else {
-            Swal.fire( {
-                icon: 'error',
-                title: 'Warning!',
-                text: 'Gambar tidak boleh lebih dari 5Mb',
-            } )
+        if ( selectedImage ) {
+            if ( selectedImage.size < 5000000 ) {
+                setImagePerson( selectedImage );
+            } else {
+                Swal.fire( {
+                    icon: 'error',
+                    title: 'Warning!',
+                    text: 'Gambar tidak boleh lebih dari 5Mb',
+                } )
+            }
         }
     };
 
@@ -71,7 +74,7 @@ function ModalTambahKaryawan ( {
 
     const fetchListGroup = () =>
     {
-        axios.get( `/api/groups/`,
+        instance.get( `/api/groups/`,
             {
                 headers:
                 {
@@ -97,7 +100,7 @@ function ModalTambahKaryawan ( {
     const [ selectedGroup, setSelectedGroup ] = useState( null );
 
 
-    const customersOptions = listGroup.map( group => ( {
+    const divisiOptions = listGroup.map( group => ( {
         value: group.id,
         label: group.name,
     } ) );
@@ -135,7 +138,7 @@ function ModalTambahKaryawan ( {
 
         // console.log( { finalData } );
         try {
-            const responseUser = await axios.post( '/api/users/', finalData,
+            const responseUser = await instance.post( '/api/users/', finalData,
                 {
                     headers: {
                         'Access-Control-Allow-Origin': '*',
@@ -152,7 +155,7 @@ function ModalTambahKaryawan ( {
                 user: responseUser.data.id
             };
             try {
-                const responseUEmployee = await axios.post( '/api/employee/', combinedData,
+                const responseUEmployee = await instance.post( '/api/employee/', combinedData,
                     {
                         headers: {
                             'Access-Control-Allow-Origin': '*',
@@ -306,7 +309,7 @@ function ModalTambahKaryawan ( {
                                 <Form.Label style={ formStyles.label } htmlFor='group'>Divisi*</Form.Label>
                                 <Select
                                     id='group'
-                                    options={ customersOptions }
+                                    options={ divisiOptions }
                                     required
                                     value={ selectedGroup }
                                     onChange={ handleSelectGroup }
@@ -362,7 +365,7 @@ function ModalTambahKaryawan ( {
                                     { errors.confirmpassword }
                                 </Form.Control.Feedback>
                                 <p
-                                    className='mt-2'
+                                    className='mt-2 mb-4'
                                     onClick={ toggleConfirmPwd }
                                     style={ { color: '#363636', fontFamily: 'Poppins-Regular', cursor: 'pointer', maxWidth: '150px' } }
                                 >

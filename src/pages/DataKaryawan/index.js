@@ -3,11 +3,13 @@ import NavbarComponent from '../../component/Navbar'
 import { Button, Col, Container, Row } from 'react-bootstrap'
 import AuthContext from '../../auth/Context/AuthContext';
 import axios from '../../adapters/API/axios';
-import { GoInfo } from 'react-icons/go';
+import { GoInfo, GoPencil } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 import { IoPersonAdd } from "react-icons/io5";
 import ModalTambahKaryawan from '../../component/Modal/ModalTambahKaryawan';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
+import ModalEditKaryawan from '../../component/Modal/ModalEditKaryawan';
+import instance from '../../adapters/API/axios';
 
 function DataKaryawan ()
 {
@@ -24,6 +26,13 @@ function DataKaryawan ()
     {
         setShowAddKaryawan( true );
     }
+    const [ showEditKaryawan, setShowEditKaryawan ] = useState( false );
+    const [ selectedId, setSelectedId ] = useState()
+    const handleShowEditKaryawan = ( row ) =>
+    {
+        setShowEditKaryawan( true );
+        setSelectedId( row.id )
+    }
 
     useEffect( () =>
     {
@@ -32,7 +41,7 @@ function DataKaryawan ()
 
     const fetchListUser = () =>
     {
-        axios.get( `/api/users/`,
+        instance.get( `/api/users/`,
             {
                 headers:
                 {
@@ -40,7 +49,6 @@ function DataKaryawan ()
                     'Content-Type': 'application/json',
                     withCredentials: true,
                     Authorization: `Token ` + tokenUser,
-                    "ngrok-skip-browser-warning": true,
                 },
 
             } )
@@ -48,13 +56,13 @@ function DataKaryawan ()
             {
 
                 setListUser( res.data );
+                // fetchListGroup( res.data );
                 // console.log( res.data )
             } ).catch( err =>
             {
                 // console.log( err )
             } )
     };
-
 
     const columns = useMemo(
         () => [
@@ -106,6 +114,35 @@ function DataKaryawan ()
                 },
                 mantineTableBodyCellProps: {
                     align: 'center',
+                },
+            },
+            {
+                header: 'Ubah',
+                accessorFn: row =>
+                {
+                    // Extract the group ID of the user
+                    const userGroupId = row.groups[ 0 ]; // Assuming the user has only one group
+
+                    // Check if the user group is superuser (id: 1)
+                    const isSuperuser = userGroupId === 1;
+
+                    // Render the Edit button based on the user's group
+                    return !isSuperuser ? (
+                        <div>
+                            <GoPencil
+                                size={ 20 }
+                                onClick={ () => handleShowEditKaryawan( row ) }
+                                style={ { cursor: 'pointer' } }
+                            />
+                        </div>
+                    ) : null;
+                },
+                size: 10,
+                mantineTableHeadCellProps: {
+                    align: 'left',
+                },
+                mantineTableBodyCellProps: {
+                    align: 'left',
                 },
             },
 
@@ -161,6 +198,12 @@ function DataKaryawan ()
             <ModalTambahKaryawan
                 showAddKaryawan={ showAddKaryawan }
                 setShowAddKaryawan={ setShowAddKaryawan }
+                fetchListUser={ fetchListUser }
+            />
+            <ModalEditKaryawan
+                showEditKaryawan={ showEditKaryawan }
+                setShowEditKaryawan={ setShowEditKaryawan }
+                selectedId={ selectedId }
                 fetchListUser={ fetchListUser }
             />
         </>

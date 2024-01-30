@@ -3,6 +3,7 @@ import AuthContext from '../../../auth/Context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../../adapters/API/axios';
 import { Container, Spinner, Table } from 'react-bootstrap';
+import instance from '../../../adapters/API/axios';
 
 function PrintPageAbsenKeluar ()
 {
@@ -83,7 +84,7 @@ function PrintPageAbsenKeluar ()
 
     const fetchUserDetail = () =>
     {
-        axios.get( `api/users/${karyawanid}`,
+        instance.get( `api/users/${karyawanid}`,
             {
                 headers:
                 {
@@ -107,7 +108,7 @@ function PrintPageAbsenKeluar ()
 
     const fetchListAdetailAbsenKeluar = () =>
     {
-        axios.get( `/api/checkout/?user_id=${karyawanid}`,
+        instance.get( `/api/checkout/?user_id=${karyawanid}`,
             {
                 headers:
                 {

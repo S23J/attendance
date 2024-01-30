@@ -5,6 +5,7 @@ import NavbarComponent from '../../component/Navbar';
 import AuthContext from '../../auth/Context/AuthContext';
 import { RxEnter, RxExit } from "react-icons/rx";
 import Swal from 'sweetalert2';
+import instance from '../../adapters/API/axios';
 
 
 function Home ()
@@ -22,7 +23,7 @@ function Home ()
             user: userInfo?.id,
         }
         try {
-            const response = await axios.post( `/api/checkin/`, finaldata,
+            const response = await instance.post( `/api/checkin/`, finaldata,
                 {
                     headers: {
                         'Access-Control-Allow-Origin': '*',
@@ -67,7 +68,7 @@ function Home ()
             user: userInfo?.id,
         }
         try {
-            const response = await axios.post( `/api/checkout/`, finaldata,
+            const response = await instance.post( `/api/checkout/`, finaldata,
                 {
                     headers: {
                         'Access-Control-Allow-Origin': '*',
@@ -167,12 +168,11 @@ function Home ()
                         </Col>
                     </Row>
                 </div>
-                <Container >
-                    <p>
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                <Container style={ { maxWidth: '600px' } }>
+                    <p style={ { fontSize: '20px', fontFamily: 'Poppins-Medium' } }>
+                        Selamat datang di Absensi Concordia Group.
+                        Harap melakukan absensi pada saat masuk dan pulang bekerja.
+                        Jika tidak melakukan absensi finger print maka akan dianggap Alfa atau tidak masuk.
                     </p>
                 </Container>
             </Container >

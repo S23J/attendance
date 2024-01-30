@@ -5,6 +5,7 @@ import axios from '../../adapters/API/axios';
 import AuthContext from '../../auth/Context/AuthContext';
 import TabAbsenMasukKaryawan from '../../component/TabsAbsensi/TabAbsenMasukKaryawan';
 import TabAbsenKeluarKaryawan from '../../component/TabsAbsensi/TabAbsenKeluarKaryawan';
+import instance from '../../adapters/API/axios';
 
 function AbsensiPage ()
 {
@@ -61,7 +62,7 @@ function AbsensiPage ()
 
     const fetchListAbsensiMasuk = () =>
     {
-        axios.get( `/api/checkin/?user_id=${userInfo?.id}`,
+        instance.get( `/api/checkin/?user_id=${userInfo?.id}`,
             {
                 headers:
                 {
@@ -88,7 +89,7 @@ function AbsensiPage ()
 
     const fetchListAbsensiKeluar = () =>
     {
-        axios.get( `/api/checkout/?user_id=${userInfo?.id}`,
+        instance.get( `/api/checkout/?user_id=${userInfo?.id}`,
             {
                 headers:
                 {
