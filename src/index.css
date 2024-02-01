@@ -154,3 +154,44 @@ a:hover {
   color: #FFFFFF !important;
   font-family: 'Poppins-Regular';
 }
+.invalid-feedback {
+  font-family: 'Poppins-Light';
+}
+
+/* Mantine Table Styling */
+
+.mantine-1f8idjp {
+  min-width: 100%;
+  font-family: 'Poppins-Medium' !important
+}
+
+.mantine-gxgfw {
+  min-width: 100%;
+  font-family: 'Poppins-Medium' !important
+}
+
+.mantine-h1g4yy {
+  font-family: 'Poppins-Regular' !important
+}
+
+.mantine-1d564l0 {
+  font-family: 'Poppins-Regular' !important
+}
+
+.mantine-1vq8ow9 {
+  font-family: 'Poppins-Regular' !important
+}
+
+.mantine-6kqrk6 {
+  font-family: 'Poppins-Regular' !important
+}
+
+.mantine-1bauqbv {
+  font-family: 'Poppins-Regular' !important
+}
+
+.mantine-1cn2mlo {
+  font-family: 'Poppins-Regular' !important
+}
+
+/* Mantine Table Styling */

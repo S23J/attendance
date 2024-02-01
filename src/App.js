@@ -4,7 +4,6 @@ import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Hrd from './pages/Hrd';
 import AbsensiPage from './pages/AbsensiPage';
 import DataKaryawan from './pages/DataKaryawan';
 import DetailKaryawan from './pages/DetailKaryawan';
@@ -20,7 +19,6 @@ function App() {
         <Route path='/' element={ <Login /> } />
         <Route element={ <PrivateRoutes /> }>
           <Route element={ <Home /> } path='/home/' />
-          <Route path='/hrd/' element={ <Hrd /> } />
           <Route path='/data-absensi/' element={ <AbsensiPage /> } />
           <Route path='/data-karyawan/' element={ <DataKaryawan /> } />
           <Route path='/detail-absensi/:absenid/' element={ <DetailAbsensi /> } />

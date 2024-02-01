@@ -219,6 +219,23 @@ function DetailKaryawan ()
     };
 
 
+    const formatDate = ( dateString ) =>
+    {
+        const date = new Date( dateString );
+
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        const formattedDay = day < 10 ? '0' + day : day;
+        const formattedMonth = month < 10 ? '0' + month : month;
+
+        const formattedDate = `${formattedDay}/${formattedMonth}/${year}`;
+
+        return formattedDate;
+    };
+
+
     return (
         <>
             <NavbarComponent />
@@ -253,7 +270,8 @@ function DetailKaryawan ()
                     </Col>
                     <Col md={ 6 } className={ isMobile ? 'my-auto text-center mt-5' : 'my-auto' } style={ { fontFamily: 'Poppins-Regular' } }>
                         <p >Username: { userDetail?.username }</p>
-                        <p >Email: { userDetail?.email }</p>
+                        <p >NIK: { employeeDetail?.nik }</p>
+                        <p>Tanggal Bergabung: { employeeDetail ? formatDate( employeeDetail.date_joined ) : '' }</p>
                         <p >No. Telp: { employeeDetail?.phone }</p>
                         <p >Divisi : { listGroup?.name }</p>
                     </Col>

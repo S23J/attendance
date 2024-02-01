@@ -97,6 +97,7 @@ function DetailAbsensi ()
                     setDone( true );
                 }, 2000 );
                 setDetailLokasiKeluar( { longitude, latitude } );
+                // console.log( res.data )
             } ).catch( err =>
             {
                 // console.log( err )
@@ -143,6 +144,7 @@ function DetailAbsensi ()
                         ) : (
                                     <Row className='mt-5' style={ { minHeight: '300px' } }>
                                         <Col md={ 6 } className='my-auto' style={ { fontFamily: 'Poppins-Regular' } }>
+                                            <p>Lokasi: { detailAbsenMasuk?.checkin_place }</p>
                                     <p>Waktu: { detailAbsenMasuk?.checkin_time.split( 'T' )[ 0 ] } { detailAbsenMasuk?.checkin_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }</p>
                                     <p>Keterlambatan: { detailAbsenMasuk?.late_duration }</p>
                                 </Col>
@@ -184,6 +186,7 @@ function DetailAbsensi ()
                             ) : (
                                     <Row className='mt-5' style={ { minHeight: '300px' } }>
                                         <Col md={ 6 } className='my-auto' style={ { fontFamily: 'Poppins-Regular' } }>
+                                            <p>Lokasi: { detailAbsenKeluar?.checkout_place }</p>
                                     <p>Waktu: { detailAbsenKeluar?.checkout_time.split( 'T' )[ 0 ] } { detailAbsenKeluar?.checkout_time.split( 'T' )[ 1 ].split( '.' )[ 0 ] }</p>
                                             <p>Pulang Awal: { detailAbsenKeluar?.early_duration }</p>
                                     <p>Lembur: { detailAbsenKeluar?.overtime_duration }</p>

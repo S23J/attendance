@@ -2,7 +2,7 @@
   "name": "attendance",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "absensi.flashklik.com",
   "dependencies": {
     "@mantine/core": "^6.0.21",
     "@mantine/dates": "^6.0.21",

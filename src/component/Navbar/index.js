@@ -90,16 +90,16 @@ function NavbarComponent ()
                     </Offcanvas.Header>
                     <Offcanvas.Body style={ { fontFamily: 'Poppins-Regular' } }>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
-                            { groups?.includes( 'HRD & GA' ) || groups?.includes( 'super_user' ) ?
+                            <NavLink
+                                to='/home/'
+                                className='my-2'
+                                style={ { textDecoration: 'none', color: 'white' } }
+                            >
+                                Home
+                            </NavLink>
+                            { groups?.includes( 'HRD & GA' ) || groups?.includes( 'superuser' ) ?
                                 (
                                     <>
-                                        <NavLink
-                                            to='/hrd/'
-                                            className='my-2'
-                                            style={ { textDecoration: 'none', color: 'white' } }
-                                        >
-                                            Home
-                                        </NavLink>
                                         <NavLink
                                             to='/data-karyawan/'
                                             className='my-2'
@@ -113,13 +113,7 @@ function NavbarComponent ()
                                 :
                                 (
                                     <>
-                                        <NavLink
-                                            to='/home/'
-                                            className='my-2'
-                                            style={ { textDecoration: 'none', color: 'white' } }
-                                        >
-                                            Home
-                                        </NavLink>
+
                                         <NavLink
                                             to='/data-absensi/'
                                             className='my-2'

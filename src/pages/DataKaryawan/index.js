@@ -27,11 +27,11 @@ function DataKaryawan ()
         setShowAddKaryawan( true );
     }
     const [ showEditKaryawan, setShowEditKaryawan ] = useState( false );
-    const [ selectedId, setSelectedId ] = useState()
+    const [ selectedEmployee, setSelectedEmployee ] = useState()
     const handleShowEditKaryawan = ( row ) =>
     {
         setShowEditKaryawan( true );
-        setSelectedId( row.id )
+        setSelectedEmployee( row )
     }
 
     useEffect( () =>
@@ -203,7 +203,7 @@ function DataKaryawan ()
             <ModalEditKaryawan
                 showEditKaryawan={ showEditKaryawan }
                 setShowEditKaryawan={ setShowEditKaryawan }
-                selectedId={ selectedId }
+                selectedEmployee={ selectedEmployee }
                 fetchListUser={ fetchListUser }
             />
         </>

@@ -22,7 +22,7 @@
 import axios from 'axios';
 
 const instance = axios.create( {
-    baseURL: `https://192.168.2.91`,
+    baseURL: `https://truficientsg.id/`,
     headers: {
         post: {
             'Access-Control-Allow-Origin': '*',

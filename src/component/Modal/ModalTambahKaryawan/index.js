@@ -12,9 +12,10 @@ import instance from '../../../adapters/API/axios';
 
 const schema = yup.object().shape( {
     username: yup.string().required( 'Username di butuhkan!' ),
-    email: yup.string().required( 'Email di butuhkan!' ),
+    // email: yup.string().required( 'Email di butuhkan!' ),
     first_name: yup.string().required( 'Nama Depan di butuhkan!' ),
     last_name: yup.string().required( 'Nama Belakang di butuhkan!' ),
+    nik: yup.string().max( 16, 'NIK tidak boleh lebih dari 16 karakter!' ),
     no_telp: yup
         .string()
         .required( 'No. Telepon di butuhkan!' )
@@ -97,6 +98,36 @@ function ModalTambahKaryawan ( {
             } )
     };
 
+    const [ joinDate, setJoinDate ] = useState( '' );
+
+    const getTodayDate = () =>
+    {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String( today.getMonth() + 1 ).padStart( 2, '0' );
+        const day = String( today.getDate() ).padStart( 2, '0' );
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleDateChange = ( e ) =>
+    {
+        const inputDate = e.target.value;
+
+        const currentDate = new Date();
+        const selectedDate = new Date( inputDate );
+
+        if ( selectedDate > currentDate ) {
+            Swal.fire( {
+                icon: 'warning',
+                title: 'Warning!',
+                text: 'Tanggal bergabung tidak bisa lebih dari hari ini!',
+            } )
+            setJoinDate( '' );
+        } else {
+            setJoinDate( inputDate );
+        }
+    };
+
     const [ selectedGroup, setSelectedGroup ] = useState( null );
 
 
@@ -112,9 +143,10 @@ function ModalTambahKaryawan ( {
 
     const defaultValue = {
         username: '',
-        email: '',
         first_name: '',
         last_name: '',
+        nik: '',
+        date_joined: '',
         no_telp: '',
         password: '',
     }
@@ -123,6 +155,7 @@ function ModalTambahKaryawan ( {
     const handleCloseAddKaryawan = () =>
     {
         setShowAddKaryawan( false );
+        setJoinDate( '' );
     };
 
 
@@ -130,7 +163,7 @@ function ModalTambahKaryawan ( {
     {
         setDisabled( true );
 
-        const { confirmpassword, no_telp, picture, ...restData } = values;
+        const { confirmpassword, no_telp, picture, nik, date_joined, ...restData } = values;
 
         const finalData = Object.assign( {}, restData, {
             groups: [ selectedGroup?.value ],
@@ -148,12 +181,15 @@ function ModalTambahKaryawan ( {
                     },
                 }
             );
-            // console.log( responseUser )
+            console.log( responseUser )
             const combinedData = {
                 phone: no_telp,
                 picture: imagePerson,
-                user: responseUser.data.id
+                user: responseUser.data.id,
+                nik: nik,
+                date_joined: joinDate
             };
+            // console.log( { combinedData } );
             try {
                 const responseUEmployee = await instance.post( '/api/employee/', combinedData,
                     {
@@ -225,26 +261,10 @@ function ModalTambahKaryawan ( {
                                     isInvalid={ !!errors.username }
                                     required
                                     placeholder="Masukkan Username"
-                                    style={ formStyles.input }
+                                    style={ { color: '#363636', fontFamily: 'Poppins-Regular', minHeight: '50px' } }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     { errors.name }
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label style={ formStyles.label } htmlFor='email'>Email*</Form.Label>
-                                <Form.Control
-                                    id='email'
-                                    type="text"
-                                    value={ values.email }
-                                    onChange={ handleChange }
-                                    isInvalid={ !!errors.email }
-                                    required
-                                    placeholder="Masukkan Email"
-                                    style={ formStyles.input }
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    { errors.email }
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -257,7 +277,7 @@ function ModalTambahKaryawan ( {
                                     isInvalid={ !!errors.first_name }
                                     required
                                     placeholder="Masukkan Email"
-                                    style={ formStyles.input }
+                                    style={ { color: '#363636', fontFamily: 'Poppins-Regular', minHeight: '50px' } }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     { errors.first_name }
@@ -273,11 +293,39 @@ function ModalTambahKaryawan ( {
                                     isInvalid={ !!errors.last_name }
                                     required
                                     placeholder="Masukkan Email"
-                                    style={ formStyles.input }
+                                    style={ { color: '#363636', fontFamily: 'Poppins-Regular', minHeight: '50px' } }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     { errors.last_name }
                                 </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label style={ formStyles.label } htmlFor='nik'>NIK</Form.Label>
+                                <Form.Control
+                                    id='nik'
+                                    type="text"
+                                    value={ values.nik }
+                                    onChange={ handleChange }
+                                    isInvalid={ !!errors.nik }
+                                    required
+                                    placeholder="Masukkan NIK"
+                                    style={ { color: '#363636', fontFamily: 'Poppins-Regular', minHeight: '50px' } }
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    { errors.nik }
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                            <Form.Group className='mb-3'>
+                                <Form.Label style={ { fontFamily: 'Poppins-Medium' } } htmlFor='tanggalJoin'>Tanggal Bergabung</Form.Label>
+                                <Form.Control
+                                    id='tanggalJoin'
+                                    type='date'
+                                    required
+                                    max={ getTodayDate() }
+                                    onChange={ handleDateChange }
+                                    value={ joinDate }
+                                    style={ { color: '#222', fontFamily: 'Poppins-Regular', minHeight: '50px' } }
+                                />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label style={ formStyles.label } htmlFor='no_telp'>No. Telp*</Form.Label>
@@ -289,7 +337,7 @@ function ModalTambahKaryawan ( {
                                     isInvalid={ !!errors.no_telp }
                                     required
                                     placeholder="Masukkan No. Telepon"
-                                    style={ formStyles.input }
+                                    style={ { color: '#363636', fontFamily: 'Poppins-Regular', minHeight: '50px' } }
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     { errors.no_telp }
