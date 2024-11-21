@@ -91,7 +91,7 @@ function NavbarComponent ()
                     <Offcanvas.Body style={ { fontFamily: 'Poppins-Regular' } }>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
                             <NavLink
-                                to='/home/'
+                                to='/home'
                                 className='my-2'
                                 style={ { textDecoration: 'none', color: 'white' } }
                             >
@@ -101,7 +101,7 @@ function NavbarComponent ()
                                 (
                                     <>
                                         <NavLink
-                                            to='/data-karyawan/'
+                                            to='/data-karyawan'
                                             className='my-2'
                                             style={ { textDecoration: 'none', color: 'white' } }
                                         >
@@ -115,7 +115,7 @@ function NavbarComponent ()
                                     <>
 
                                         <NavLink
-                                            to='/data-absensi/'
+                                            to='/data-absensi'
                                             className='my-2'
                                             style={ { textDecoration: 'none', color: 'white' } }
                                         >

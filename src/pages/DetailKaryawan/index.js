@@ -34,7 +34,7 @@ function DetailKaryawan ()
 
     const handleAbsensiDetail = ( row ) =>
     {
-        navigate( '/detail-absensi/' + row.id + '/' )
+        navigate( '/detail-absensi/' + row.id )
     }
     const handleBack = () =>
     {

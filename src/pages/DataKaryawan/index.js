@@ -19,7 +19,7 @@ function DataKaryawan ()
     const navigate = useNavigate();
     const handleDetail = ( data ) =>
     {
-        navigate( '/detail-karyawan/' + data.id + '/' )
+        navigate( '/detail-karyawan/' + data.id )
     };
     const [ showAddKaryawan, setShowAddKaryawan ] = useState( false );
     const handleShowAddKaryawan = () =>

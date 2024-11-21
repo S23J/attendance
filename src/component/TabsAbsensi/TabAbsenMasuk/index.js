@@ -19,7 +19,7 @@ function TabAbsenMasuk ( {
 
     const printAbsensi = () =>
     {
-        navigate( "/absen-masuk/" + karyawanid + "/" );
+        navigate( "/absen-masuk/" + karyawanid );
     }
 
     const columns = useMemo(

@@ -65,7 +65,7 @@ function Login ()
             } )
             setIsSubmittingLogin( false );
             setDisabled( false );
-            navigate( '/home/' )
+            navigate( '/home' )
             // if ( userGroups.includes( 'HRD & GA' ) || userGroups.includes( 'superuser' ) ) {
             //     navigate( '/hrd/' )
             // } else {

@@ -7,12 +7,6 @@ export const AuthProvider = ( { children } ) =>
     const [ userInfo, setUserInfo ] = useState( null );
     const [ groups, setGroups ] = useState( null );
     const [ tokens, setTokens ] = useState( null );
-    const [ showSidebar, setShowSidebar ] = useState( true );
-
-    const toggleSidebar = () =>
-    {
-        setShowSidebar( !showSidebar );
-    };
 
     useEffect( () =>
     {
@@ -56,9 +50,6 @@ export const AuthProvider = ( { children } ) =>
                 setUserInfo,
                 tokens,
                 setTokens,
-                showSidebar,
-                setShowSidebar,
-                toggleSidebar,
                 groups,
                 setGroups,
             } }
